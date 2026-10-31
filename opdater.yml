@@ -1,0 +1,32 @@
+name: Opdatér resultater
+
+on:
+  schedule:
+    - cron: "*/10 11-23 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: opdater
+  cancel-in-progress: false
+
+jobs:
+  opdater:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Hent resultater
+        run: python3 opdater_resultater.py
+      - name: Gem ændringer
+        run: |
+          if git diff --quiet; then
+            echo "Ingen nye resultater"
+            exit 0
+          fi
+          git config user.name "domis-tips-robot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "Nye resultater"
+          git push
