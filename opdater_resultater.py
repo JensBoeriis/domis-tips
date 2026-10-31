@@ -15,7 +15,7 @@ LEAGUE_NAMES = {"eng.1": "Premier League", "eng.2": "Championship", "den.1": "3F
                 "den.2": "1. division", "ger.1": "Bundesliga", "esp.1": "La Liga", "ita.1": "Serie A",
                 "fra.1": "Ligue 1", "ned.1": "Eredivisie", "uefa.champions": "Champions League",
                 "uefa.europa": "Europa League", "uefa.europa.conf": "Conference League"}
-URL = "https://site.api.espn.com/apis/site/v2/sports/soccer/{lg}/scoreboard?dates={d1}-{d2}&limit=300"
+BASE = "https://site.api.espn.com/apis/site/v2/sports/soccer/{lg}/scoreboard"
 
 # Kendte kaldenavne -> ord der skal findes i ESPN's holdnavn
 ALIASES = {
@@ -62,15 +62,38 @@ def matches(ours, comp):
     return any(k and k in hay for k in keys_for(ours))
 
 
+def get(url):
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (domis-tips)", "Accept": "application/json"})
+    with urllib.request.urlopen(req, timeout=20) as r:
+        return json.load(r).get("events", [])
+
+
 def fetch(lg, d1, d2):
-    url = URL.format(lg=lg, d1=d1, d2=d2)
-    req = urllib.request.Request(url, headers={"User-Agent": "domis-tips/1.0"})
+    """Prøver først hele perioden, derefter én dag ad gangen. En liga der fejler stopper ikke resten."""
+    base = BASE.format(lg=lg)
     try:
-        with urllib.request.urlopen(req, timeout=20) as r:
-            return json.load(r).get("events", [])
-    except Exception as e:  # en liga der fejler må ikke stoppe resten
-        print(f"  {lg}: {e}", file=sys.stderr)
-        return []
+        return get(f"{base}?dates={d1}-{d2}")
+    except Exception as e:
+        first_err = e
+    events, ok, day = [], False, datetime.strptime(d1, "%Y%m%d")
+    last = datetime.strptime(d2, "%Y%m%d")
+    while day <= last:
+        try:
+            events += get(f"{base}?dates={day.strftime('%Y%m%d')}")
+            ok = True
+        except Exception as e:
+            first_err = e
+        day += timedelta(days=1)
+    if not ok:
+        try:  # sidste udvej: dagens/aktuelle kampe uden datofilter
+            events = get(base); ok = True
+        except Exception as e:
+            print(f"  {lg}: {e} (første fejl: {first_err})", file=sys.stderr)
+    seen, out = set(), []
+    for ev in events:
+        if ev.get("id") not in seen:
+            seen.add(ev.get("id")); out.append(ev)
+    return out
 
 
 def to_res(ev):
