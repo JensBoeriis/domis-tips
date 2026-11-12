@@ -9,12 +9,13 @@ from datetime import datetime, timedelta, timezone
 
 DATA_FILE = "data.json"
 LEAGUES = ["eng.1", "eng.2", "den.1", "den.2", "ger.1", "esp.1", "ita.1", "fra.1",
-           "ned.1", "por.1", "sco.1", "swe.1", "nor.1", "uefa.champions", "uefa.europa",
+           "ned.1", "por.1", "sco.1", "swe.1", "nor.1", "uefa.nations", "fifa.friendly", "fifa.worldq.uefa", "uefa.champions", "uefa.europa",
            "uefa.europa.conf", "eng.fa", "eng.league_cup", "den.cup", "ger.dfb_pokal"]
 LEAGUE_NAMES = {"eng.1": "Premier League", "eng.2": "Championship", "den.1": "3F Superliga",
                 "den.2": "1. division", "ger.1": "Bundesliga", "esp.1": "La Liga", "ita.1": "Serie A",
                 "fra.1": "Ligue 1", "ned.1": "Eredivisie", "uefa.champions": "Champions League",
-                "uefa.europa": "Europa League", "uefa.europa.conf": "Conference League"}
+                "uefa.europa": "Europa League", "uefa.europa.conf": "Conference League",
+                "uefa.nations": "Nations League", "fifa.friendly": "Landskamp"}
 BASE = "https://site.api.espn.com/apis/site/v2/sports/soccer/{lg}/scoreboard"
 
 # Kendte kaldenavne -> ord der skal findes i ESPN's holdnavn
@@ -32,6 +33,15 @@ ALIASES = {
     "vejle": ["vejle"], "lyngby": ["lyngby"], "viborg": ["viborg"], "silkeborg": ["silkeborg"],
     "aab": ["aalborg", "aab"], "inter": ["internazionale", "inter milan"], "psg": ["paris saint-germain", "paris sg"],
     "wolves": ["wolverhampton"], "west ham": ["west ham"], "leeds": ["leeds"],
+    # landshold (danske navne)
+    "tyrkiet": ["turkey", "turkiye"], "belgien": ["belgium"], "italien": ["italy"], "frankrig": ["france"],
+    "tjekkiet": ["czech", "czechia"], "spanien": ["spain"], "england": ["england"], "kroatien": ["croatia"],
+    "serbien": ["serbia"], "tyskland": ["germany"], "holland": ["netherlands", "holland"],
+    "nederlandene": ["netherlands"], "graekenland": ["greece"], "portugal": ["portugal"], "danmark": ["denmark"],
+    "norge": ["norway"], "sverige": ["sweden"], "wales": ["wales"], "skotland": ["scotland"],
+    "schweiz": ["switzerland"], "osterrig": ["austria"], "polen": ["poland"], "ungarn": ["hungary"],
+    "irland": ["ireland"], "nordirland": ["northern ireland"], "island": ["iceland"], "finland": ["finland"],
+    "rumaenien": ["romania"], "slovakiet": ["slovakia"], "slovenien": ["slovenia"], "ukraine": ["ukraine"],
 }
 STOP = {"fc", "afc", "if", "bk", "ff", "sc", "cf", "ac", "united", "city", "the", "1", "of"}
 
