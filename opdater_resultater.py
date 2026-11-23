@@ -30,6 +30,8 @@ ALIASES = {
     "fc kobenhavn": ["copenhagen", "kobenhavn"], "kobenhavn": ["copenhagen", "kobenhavn"],
     "fc nordsjaelland": ["nordsjaelland"], "fc midtjylland": ["midtjylland"], "fcm": ["midtjylland"],
     "ac horsens": ["horsens"], "randers": ["randers"], "sonderjyske": ["sonderjyske", "sonderjylland"],
+    "hamburger sv": ["hamburg"], "hsv": ["hamburg"], "werder bremen": ["werder", "bremen"],
+    "esbjerg": ["esbjerg"], "ab": ["akademisk", "gladsaxe"], "hull": ["hull"],
     "vejle": ["vejle"], "lyngby": ["lyngby"], "viborg": ["viborg"], "silkeborg": ["silkeborg"],
     "aab": ["aalborg", "aab"], "inter": ["internazionale", "inter milan"], "psg": ["paris saint-germain", "paris sg"],
     "wolves": ["wolverhampton"], "west ham": ["west ham"], "leeds": ["leeds"],
